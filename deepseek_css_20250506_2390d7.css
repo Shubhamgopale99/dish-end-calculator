@@ -1,0 +1,154 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --background-color: #f8f9fa;
+    --text-color: #333;
+    --success-color: #27ae60;
+    --error-color: #e74c3c;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    padding: 2rem 1rem;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.header h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+}
+
+.calculator {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.input-field {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.ratio-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.optional {
+    color: #95a5a6;
+    font-weight: 400;
+    font-size: 0.9em;
+}
+
+.calculate-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s ease, background-color 0.3s ease;
+}
+
+.calculate-btn:hover {
+    background-color: #2980b9;
+}
+
+.calculate-btn:active {
+    transform: scale(0.98);
+}
+
+.results-card {
+    margin-top: 2rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: opacity 0.3s ease;
+}
+
+.results-output {
+    white-space: pre-wrap;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text-color);
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .ratio-inputs {
+        grid-template-columns: 1fr;
+    }
+    
+    .header h1 {
+        font-size: 2rem;
+    }
+    
+    .calculator {
+        padding: 1.5rem;
+    }
+}
+
+/* Error state styling */
+.error {
+    color: var(--error-color);
+    border-color: var(--error-color);
+    background: #fdeded;
+}
+
+.error-message {
+    color: var(--error-color);
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}

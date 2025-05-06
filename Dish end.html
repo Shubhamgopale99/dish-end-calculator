@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dish End Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- PyScript -->
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 700px; margin: auto; }
+        input { margin: 5px 0; padding: 5px; width: 100%; }
+        button { margin: 10px 0; padding: 8px 16px; font-size: 16px; }
+        pre { background: #f7f7f7; padding: 12px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+
+<h1>Dish End Calculator</h1>
+
+<p>Enter the dimensions below:</p>
+
+<label>Tank ID (mm): <input type="number" id="tank_id" /></label><br>
+<label>Straight Flange (SF, mm): <input type="number" id="sf" /></label><br>
+<label>Dish Thickness (mm): <input type="number" id="dish_thk" /></label><br>
+
+<button py-click="calculate()">Calculate</button>
+
+<h2>Results</h2>
+<pre id="results">Waiting for input...</pre>
+
+<py-script>
+import math
+from js import document
+
+def calculate_torispherical_dish(tank_id_mm, sf_mm, dish_thk_mm):
+    crown_radius = tank_id_mm * 1.00
+    knuckle_radius = tank_id_mm * 0.10
+    dish_blank_dia = tank_id_mm + 0.10 * tank_id_mm + 2 * sf_mm
+    dish_end_height = (tank_id_mm * 0.194) + sf_mm + dish_thk_mm
+    d3 = tank_id_mm ** 3
+    d2 = tank_id_mm ** 2
+    volume_m3 = ((0.0847 * d3) + (math.pi * d2 * sf_mm) / 4) * 1e-6
+    return crown_radius, knuckle_radius, dish_blank_dia, dish_end_height, volume_m3
+
+def calculate_ellipsoidal_dish(tank_id_mm, sf_mm, dish_thk_mm):
+    crown_radius = 0.9 * tank_id_mm
+    dish_blank_dia = 1.17 * tank_id_mm + 2 * sf_mm
+    dish_end_height = (0.25 * tank_id_mm) + sf_mm + dish_thk_mm
+    d3 = tank_id_mm ** 3
+    d2 = tank_id_mm ** 2
+    volume_m3 = ((math.pi * d3) / 24 + (math.pi * d2 * sf_mm) / 4) * 1e-9
+    return crown_radius, dish_blank_dia, dish_end_height, volume_m3
+
+def calculate(*args):
+    try:
+        tank_id = float(document.getElementById("tank_id").value)
+        sf = float(document.getElementById("sf").value)
+        dish_thk = float(document.getElementById("dish_thk").value)
+
+        crown_r_torispherical, knuckle_r, blank_dia_torispherical, end_height_torispherical, volume_torispherical = calculate_torispherical_dish(tank_id, sf, dish_thk)
+        crown_r_ellipsoidal, blank_dia_ellipsoidal, end_height_ellipsoidal, volume_ellipsoidal = calculate_ellipsoidal_dish(tank_id, sf, dish_thk)
+
+        result = f"""
+--- Torispherical Dish End ---
+Crown Radius       : {crown_r_torispherical:.2f} mm
+Knuckle Radius     : {knuckle_r:.2f} mm
+Blank Diameter     : {blank_dia_torispherical:.2f} mm
+End Height         : {end_height_torispherical:.2f} mm
+Volume             : {volume_torispherical:.6f} m³ ({volume_torispherical*1000:.3f} liters)
+
+--- Ellipsoidal Dish End ---
+Crown Radius       : {crown_r_ellipsoidal:.2f} mm
+Blank Diameter     : {blank_dia_ellipsoidal:.2f} mm
+End Height         : {end_height_ellipsoidal:.2f} mm
+Volume             : {volume_ellipsoidal:.6f} m³ ({volume_ellipsoidal*1000:.3f} liters)
+"""
+        document.getElementById("results").innerText = result
+    except Exception as e:
+        document.getElementById("results").innerText = f"Error: {e}"
+</py-script>
+
+</body>
+</html>
